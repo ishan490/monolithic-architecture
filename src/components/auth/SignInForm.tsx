@@ -59,6 +59,7 @@ export default function SignInForm() {
           </div>
 
           <div>
+            {/* Social Login */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
               <button
                 type="button"
@@ -75,6 +76,7 @@ export default function SignInForm() {
               </button>
             </div>
 
+            {/* Divider */}
             <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
@@ -87,9 +89,11 @@ export default function SignInForm() {
               </div>
             </div>
 
+            {/* Form */}
             <form onSubmit={handleSubmit}>
               <div className="space-y-6">
 
+                {/* Email */}
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>
