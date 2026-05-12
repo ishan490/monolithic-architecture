@@ -1,0 +1,8 @@
+import { Navigate, Outlet } from "react-router";
+import { useAuthStore } from "../store/authStore";
+
+export default function PublicRoute() {
+  const token = useAuthStore((state) => state.token);
+
+  return token ? <Navigate to="/dashboard" replace /> : <Outlet />;
+}
