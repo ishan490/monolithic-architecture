@@ -1,0 +1,29 @@
+.leaflet-control-geosearch {
+  width: 320px !important;
+}
+
+.leaflet-control-geosearch form {
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-control-geosearch input {
+  height: 52px !important;
+
+  padding: 0 18px !important;
+
+  font-size: 15px !important;
+
+  border: none !important;
+
+  outline: none !important;
+}
+
+.leaflet-control-geosearch button {
+  background: #2563eb !important;
+  color: white !important;
+}
