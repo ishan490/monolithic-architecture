@@ -227,3 +227,22 @@ export const calculateDistance = (
 
   return (R * c).toFixed(2);
 };
+
+export const geoJsonData = {
+  type: "Feature",
+  properties: {
+    name: "Delivery Zone",
+  },
+  geometry: {
+    type: "Polygon",
+    coordinates: [
+      [
+        [72.56, 23.01],
+        [72.58, 23.03],
+        [72.60, 23.02],
+        [72.56, 23.01],
+      ],
+    ],
+  },
+};
+

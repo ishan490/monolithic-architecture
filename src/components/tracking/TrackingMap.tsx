@@ -8,23 +8,24 @@ import {
   Polygon,
   Circle,
   Rectangle,
-  useMap,
+  useMap, GeoJSON
 } from "react-leaflet";
 
 import "../../lib/leaflet";
-import { calculateDistance, riders } from "./data";
+import { calculateDistance, geoJsonData, riders } from "./data";
 
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 
 import "../../styles/cluster.css";
-
+import "leaflet-fullscreen";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 
 import RoutingMachine from "../maps/RoutingMachine";
+import "leaflet.heat";
 
 import MapSearch from "../maps/MapSearch";
-
+import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 type LatLngTuple = [number, number];
 
 // Route Polyline
@@ -33,6 +34,56 @@ const routePositions: LatLngTuple[] = [
   [23.0325, 72.5814],
   [23.0425, 72.5914],
 ];
+
+// Heatmap Data
+const heatData = [
+  [23.0225, 72.5714, 0.8],
+  [23.0325, 72.5814, 0.5],
+  [23.0425, 72.5914, 1.0],
+  [23.0525, 72.6014, 0.7],
+];
+
+// Heatmap Layer Component
+function HeatmapLayer() {
+  const map = useMap();
+
+  useEffect(() => {
+    const heat = (L as any).heatLayer(
+      heatData,
+      {
+        radius: 25,
+        blur: 20,
+        maxZoom: 17,
+      }
+    );
+
+    heat.addTo(map);
+
+    return () => {
+      map.removeLayer(heat);
+    };
+  }, [map]);
+
+  return null;
+}
+
+
+function FullscreenControl() {
+  const map = useMap();
+
+  useEffect(() => {
+    (L.control as any)
+      .fullscreen({
+        position: "topright",
+        title: "Show Fullscreen",
+        titleCancel: "Exit Fullscreen",
+        forceSeparateButton: true,
+      })
+      .addTo(map);
+  }, [map]);
+
+  return null;
+}
 
 // Polygon Area
 const polygonPositions: LatLngTuple[] = [
@@ -118,31 +169,31 @@ export default function TrackingMap() {
           Advanced Tracking Map
         </h2>
 
-       <div className="flex items-center gap-3">
-  {/* Search Route */}
-  <button
-    onClick={() =>
-      setShowSearchModal(true)
-    }
-    className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
-  >
-    Search Route
-  </button>
+        <div className="flex items-center gap-3">
+          {/* Search Route */}
+          <button
+            onClick={() =>
+              setShowSearchModal(true)
+            }
+            className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+          >
+            Search Route
+          </button>
 
-  {/* Clear Route */}
-  <button
-    onClick={() => {
-      setStartLocation(null);
-      setEndLocation(null);
+          {/* Clear Route */}
+          <button
+            onClick={() => {
+              setStartLocation(null);
+              setEndLocation(null);
 
-      setStartLabel("");
-      setEndLabel("");
-    }}
-    className="rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
-  >
-    Clear Route
-  </button>
-</div>
+              setStartLabel("");
+              setEndLabel("");
+            }}
+            className="rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
+          >
+            Clear Route
+          </button>
+        </div>
       </div>
 
       {/* Map Wrapper */}
@@ -261,6 +312,13 @@ export default function TrackingMap() {
           <ChangeMapView
             center={currentLocation}
           />
+
+          {/* Fullscreen */}
+          <FullscreenControl />
+
+
+          {/* Heatmap */}
+          <HeatmapLayer />
 
           {/* Tile Layer */}
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -406,6 +464,18 @@ export default function TrackingMap() {
               Restricted Area
             </Popup>
           </Rectangle>
+
+
+          {/* GeoJSON */}
+          <GeoJSON
+            data={geoJsonData as any}
+            style={{
+              color: "orange",
+              weight: 3,
+              fillOpacity: 0.2,
+            }}
+          />
+
         </MapContainer>
       </div>
     </div>
