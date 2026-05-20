@@ -316,7 +316,6 @@ export default function TrackingMap() {
           {/* Fullscreen */}
           <FullscreenControl />
 
-
           {/* Heatmap */}
           <HeatmapLayer />
 
